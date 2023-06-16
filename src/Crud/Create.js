@@ -2,6 +2,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_ID = 'a67648960acd4fe4a72b25b31faf5d95';
+
 function Create() {
 
     const [post, setPost] = useState({
@@ -15,14 +17,15 @@ function Create() {
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        axios.post('https://crudcrud.com/api/6e4e575032564ed799429756e93f6cbf',{
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => console.log(response))
-        // navigate('/')
+      if (!post.name || !post.email) {
+        return;
+      }
+      event.preventDefault();
+      axios.post(`https://crudcrud.com/api/${API_ID}/users`, post)
+      .then(response => {
+        window.location.href = '/';
+      })
+      .catch(console.log)
     };
   return (
     <div className="d-flex w-100 vh-100 justify-content-center align-items-center">

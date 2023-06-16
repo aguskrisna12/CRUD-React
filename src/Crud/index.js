@@ -2,23 +2,29 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-
+const API_ID = 'a67648960acd4fe4a72b25b31faf5d95';
 
 function Data() {
     const [data, setData] = useState([]);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`https://crudcrud.com/api/${API_ID}/users`);
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('https://crudcrud.com/api/6e4e575032564ed799429756e93f6cbf');
-          setData(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-  
       fetchData();
     }, []);
     console.log(data)
+
+    function handleDelete(id) {
+        axios.delete(`https://crudcrud.com/api/${API_ID}/users/${id}`)
+        .then(fetchData)
+        .catch(console.log)
+    }
+
   return (
     <div className="container">
       <h2>CRUD</h2>
@@ -35,27 +41,27 @@ function Data() {
           </tr>
         </thead>
         <tbody>
-          {/* {users.map((user, index) => (
+          {data.map((data, index) => (
             <tr key={index}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
+              <td>{data._id}</td>
+              <td>{data.name}</td>
+              <td>{data.email}</td>
               <td>
                 <Link
-                  to={`/edit/${user.id}`}
+                  to={`/edit/${data._id}`}
                   className="btn btn-sm btn-primary"
                 >
                   Edit
                 </Link>
                 <button
-                  onClick={() => handleDelete(user.id)}
+                  onClick={() => handleDelete(data._id)}
                   className="btn btn-sm btn-danger ms-2"
                 >
                   Delete
                 </button>
               </td>
             </tr>
-          ))} */}
+          ))}
         </tbody>
       </table>
     </div>
