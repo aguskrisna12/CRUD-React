@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_ID = 'a67648960acd4fe4a72b25b31faf5d95';
+const API_ID = 'c6867fa0cdd04dee8e04b52d679c9349';
 
 function Create() {
 
@@ -22,10 +22,7 @@ function Create() {
       }
       event.preventDefault();
       axios.post(`https://crudcrud.com/api/${API_ID}/users`, post)
-      .then(response => {
-        window.location.href = '/';
-      })
-      .catch(console.log)
+      navigate('/')
     };
   return (
     <div className="d-flex w-100 vh-100 justify-content-center align-items-center">

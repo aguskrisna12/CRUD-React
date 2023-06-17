@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API_ID = 'a67648960acd4fe4a72b25b31faf5d95';
+const API_ID = 'c6867fa0cdd04dee8e04b52d679c9349';
 
 function Data() {
     const [data, setData] = useState([]);
@@ -22,6 +22,7 @@ function Data() {
     function handleDelete(id) {
         axios.delete(`https://crudcrud.com/api/${API_ID}/users/${id}`)
         .then(fetchData)
+        .then(alert('successfull deleted'))
         .catch(console.log)
     }
 
@@ -48,7 +49,7 @@ function Data() {
               <td>{data.email}</td>
               <td>
                 <Link
-                  to={`/edit/${data._id}`}
+                  to={`/update/${data._id}`}
                   className="btn btn-sm btn-primary"
                 >
                   Edit
