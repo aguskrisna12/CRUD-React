@@ -1,29 +1,29 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 
-
-const API_ID = 'c6867fa0cdd04dee8e04b52d679c9349';
+const API_KEY = 'c948dfbf2ee64c04814c1539f9091ca7'
+const url = `https://crudcrud.com/api/${API_KEY}/users`
 
 
 function Update() {
     const {id} = useParams()
     const navigate = useNavigate()
-    console.log(id)
-    const [data, setData] = useState([])
-    const [uname, setUname] = useState('')
-    const [uemail, setUemail] = useState('')
-    const datas = {uname, uemail}
-    const fetchData = async() => {
-        try {
-            const response = await axios.get(`https://crudcrud.com/api/${API_ID}/users/${id}`)
-            console.log(response.data)
-            setData(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    const [name, setUname] = useState('')
+    const [email, setUemail] = useState('')
+
+    const fetchData = () => {
+      try {
+        fetch(`${url}`)
+          .then(response => response.json())
+          .then(json => {
+            setUname(json[0]['name'])
+            setUemail(json[0]['email'])
+          })
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
     useEffect(() => {
         fetchData()
@@ -31,9 +31,20 @@ function Update() {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        axios.put(`https://crudcrud.com/api/${API_ID}/users/${id}`, datas)
-        .then(res => console.log(res.data))
-        // navigate('/')
+        
+        let datas = {name, email}
+        console.log(datas)
+
+        fetch(`${url}/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type' : 'application/json'
+          },
+          body: JSON.stringify(datas)
+        })
+        
+        navigate('/')
     }
     
   return (
@@ -48,8 +59,8 @@ function Update() {
               name="name"
               className="form-control"
               placeholder="enter name"
-              value={data.name}
-              onChange={(e) => { setUname(e.target.value) }}  
+              value={name}
+              onChange={ e => setUname(e.target.value)}  
             />
           </div>
           <div>
@@ -59,8 +70,8 @@ function Update() {
               name="email"
               className="form-control"
               placeholder="enter email"
-              value={data.email}
-              onChange={(e) => { setUemail(e.target.value) }}
+              value={email}
+              onChange={ e => setUemail(e.target.value)}
             />
           </div>
           <br />

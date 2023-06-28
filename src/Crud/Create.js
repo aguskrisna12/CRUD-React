@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_ID = 'c6867fa0cdd04dee8e04b52d679c9349';
+const API_KEY = 'c948dfbf2ee64c04814c1539f9091ca7'
+const url = `https://crudcrud.com/api/${API_KEY}/users`
 
 function Create() {
 
@@ -21,8 +21,19 @@ function Create() {
         return;
       }
       event.preventDefault();
-      axios.post(`https://crudcrud.com/api/${API_ID}/users`, post)
-      navigate('/')
+      try {
+        fetch(`${url}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(post)
+        })
+        navigate('/')
+      } catch (error) {
+        console.log(error)
+      }
+      
     };
   return (
     <div className="d-flex w-100 vh-100 justify-content-center align-items-center">

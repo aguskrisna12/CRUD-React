@@ -1,29 +1,32 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API_ID = 'c6867fa0cdd04dee8e04b52d679c9349';
+const API_KEY = 'c948dfbf2ee64c04814c1539f9091ca7'
+const url = `https://crudcrud.com/api/${API_KEY}/users`
 
 function Data() {
     const [data, setData] = useState([]);
-    const fetchData = async () => {
+    const fetchData = () => {
       try {
-        const response = await axios.get(`https://crudcrud.com/api/${API_ID}/users`);
-        setData(response.data);
+        fetch(`${url}`)
+          .then(response => response.json())
+          .then(json => setData(json))
       } catch (error) {
         console.error(error);
       }
     };
+    
     useEffect(() => {
       fetchData();
     }, []);
-    console.log(data)
 
     function handleDelete(id) {
-        axios.delete(`https://crudcrud.com/api/${API_ID}/users/${id}`)
+
+      fetch(`${url}/${id}`, {
+        method: 'DELETE'
+      })
         .then(fetchData)
-        .then(alert('successfull deleted'))
-        .catch(console.log)
+        .then(alert('success delete'))
     }
 
   return (
@@ -37,12 +40,12 @@ function Data() {
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Email</th>
+            <th>Name</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((data, index) => (
+        {data.map((data, index) => (
             <tr key={index}>
               <td>{data._id}</td>
               <td>{data.name}</td>
